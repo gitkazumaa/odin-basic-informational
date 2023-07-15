@@ -1,17 +1,34 @@
-const https = require('https');
-const url = require('url');
-const fs = require('fs');
+var http = require('http');
+var fs = require('fs');
 
-https.createServer((req, res) => {
-    var q = url.parse(req.url, true);
-    var filename = "." + q.pathname;
-    fs.readFile(filename, (err, data) => {
-        if (err) {
-            res.writeHead(404, {'Content-Type': 'text/html'});
-            return res.end('404 Not Found');
-        }
-        res.writeHead(200, {'Content-Type': 'text/html'});
-        res.write(data);
-        return res.end();
-    });
-}).listen(8080);
+http.createServer((req, res) => {
+    if (req.url === '/') {
+        fs.readFile('index.html', (err, data) => {
+            if (err) throw err;
+            res.writeHead(200, {'Content-Type':'text/html'});
+            res.write(data);
+            return res.end;
+        })
+    } else if (req.url === '/about') {
+        fs.readFile('about.html', (err, data) => {
+            if (err) throw err;
+            res.writeHead(200, {'Content-Type':'text/html'});
+            res.write(data);
+            return res.end;
+        })
+    } else if (req.url === '/contact-me') {
+        fs.readFile('contact-me.html', (err, data) => {
+            if (err) throw err;
+            res.writeHead(200, {'Content-Type':'text/html'});
+            res.write(data);
+            return res.end;
+        })
+    } else {
+        fs.readFile('404.html', (err, data) => {
+            if (err) throw err;
+            res.writeHead(200, {'Content-Type':'text/html'});
+            res.write(data);
+            return res.end;
+        })
+    }
+}).listen(8080, () => console.log('Listening on port 8080'))
